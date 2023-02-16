@@ -1,10 +1,18 @@
 import { View, Text, StyleSheet, Image } from "react-native";
 import { Feather } from "@expo/vector-icons";
 
-const CartListItem = ({ cartItem }) => {
-  const increaseQuantity = () => {};
+import { useCartStore } from "../stores";
 
-  const decreaseQuantity = () => {};
+const CartListItem = ({ cartItem }) => {
+  const updateProductQuantity = useCartStore((state) => state.changeQuantity);
+
+  const increaseQuantity = () => {
+    updateProductQuantity(cartItem, +1);
+  };
+
+  const decreaseQuantity = () => {
+    updateProductQuantity(cartItem, -1);
+  };
 
   return (
     <View style={styles.container}>
@@ -15,19 +23,21 @@ const CartListItem = ({ cartItem }) => {
 
         <View style={styles.footer}>
           <Feather
-            onPress={increaseQuantity}
+            onPress={decreaseQuantity}
             name="minus-circle"
             size={24}
             color="gray"
           />
           <Text style={styles.quantity}>{cartItem.quantity}</Text>
           <Feather
-            onPress={decreaseQuantity}
+            onPress={increaseQuantity}
             name="plus-circle"
             size={24}
             color="gray"
           />
-          <Text style={styles.itemTotal}>$320.0</Text>
+          <Text style={styles.itemTotal}>
+            ${cartItem.product.price * cartItem.quantity}
+          </Text>
         </View>
       </View>
     </View>

@@ -1,29 +1,39 @@
 import { FlatList, StyleSheet, View, Text, Pressable } from "react-native";
-import cart from "../data/cart";
-import CartListItem from "../components/CartListItem";
 
-const cartTotalFooter = () => (
-  <View style={styles.totalsContainer}>
-    <View style={styles.row}>
-      <Text style={styles.text}>Subtotal</Text>
-      <Text style={styles.text}>410,00 US$</Text>
+import CartListItem from "../components/CartListItem";
+import { useCartStore } from "../stores";
+
+const cartTotalFooter = () => {
+  const getSubTotalValue = useCartStore((state) => state.getSubTotal)();
+  const getDeliveryChargesValue = useCartStore(
+    (state) => state.getDeliveryCharges
+  )();
+  return (
+    <View style={styles.totalsContainer}>
+      <View style={styles.row}>
+        <Text style={styles.text}>Subtotal</Text>
+        <Text style={styles.text}>{getSubTotalValue} US$</Text>
+      </View>
+      <View style={styles.row}>
+        <Text style={styles.text}>Delivery</Text>
+        <Text style={styles.text}>{getDeliveryChargesValue} US$</Text>
+      </View>
+      <View style={styles.row}>
+        <Text style={styles.textBold}>Total</Text>
+        <Text style={styles.textBold}>
+          {getDeliveryChargesValue + getSubTotalValue} US$
+        </Text>
+      </View>
     </View>
-    <View style={styles.row}>
-      <Text style={styles.text}>Delivery</Text>
-      <Text style={styles.text}>16,50 US$</Text>
-    </View>
-    <View style={styles.row}>
-      <Text style={styles.textBold}>Total</Text>
-      <Text style={styles.textBold}>426,50 US$</Text>
-    </View>
-  </View>
-);
+  );
+};
 
 const ShoppingCart = () => {
+  const cartItems = useCartStore((state) => state.cartItems);
   return (
     <>
       <FlatList
-        data={cart}
+        data={cartItems}
         renderItem={({ item }) => <CartListItem cartItem={item} />}
         ListFooterComponent={cartTotalFooter}
       />

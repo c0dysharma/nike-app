@@ -8,13 +8,16 @@ import {
   ScrollView,
   Pressable,
 } from "react-native";
-import products from "../data/products";
+
+import { useProductsStore, useCartStore } from "../stores";
 
 const ProductsDetailsPage = () => {
-  const product = products[0];
-  const { width } = useWindowDimensions();
+  const product = useProductsStore((state) => state.selectedProduct);
+  const addToCartState = useCartStore((state) => state.addCartItem);
 
-  const addToCart = () => console.warn("Add to cart pressed!!");
+  const { width } = useWindowDimensions();
+  const addToCart = () => addToCartState(product);
+
   return (
     <View>
       <ScrollView>

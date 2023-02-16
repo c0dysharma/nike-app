@@ -6,10 +6,12 @@ import { FontAwesome5 } from "@expo/vector-icons";
 import ProductsDetailsPage from "./screens/ProductsDetailsPage";
 import ProductsPage from "./screens/ProductsPage";
 import ShoppingCart from "./screens/ShoppingCartPage";
+import { useCartStore } from "./stores";
 
 const Stack = createNativeStackNavigator();
 
 const Navigation = () => {
+  const cartListItemsLen = useCartStore((state) => state.cartItems).length;
   return (
     <NavigationContainer>
       <Stack.Navigator
@@ -25,7 +27,7 @@ const Navigation = () => {
                 style={{ flexDirection: "row" }}
               >
                 <FontAwesome5 name="shopping-cart" size={18} color="gray" />
-                <Text style={styles.cartItems}>1</Text>
+                <Text style={styles.cartItems}>{cartListItemsLen}</Text>
               </Pressable>
             ),
           })}
